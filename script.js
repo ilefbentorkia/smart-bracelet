@@ -3,7 +3,9 @@ const API = {
     attendance: 'http://localhost/smart-bracelet-site/api/attendance.php',
     employees: 'http://localhost/smart-bracelet-site/api/employe.php',
     alerts: 'http://localhost/smart-bracelet-site/api/alert.php',
-    health: 'http://localhost/smart-bracelet-site/api/health.php'
+    health: 'http://localhost/smart-bracelet-site/api/health.php',
+    dashboard: 'http://localhost/smart-bracelet-site/api/dashboard.php';
+    
 };
 
 document.addEventListener('DOMContentLoaded', function() {
