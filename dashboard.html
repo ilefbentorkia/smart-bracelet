@@ -47,7 +47,7 @@
                     </div>
                 </div>
 
-
+                <!-- Graphique Fréquence Cardiaque -->
                 <div class="dashboard-card full-width">
                     <div class="card-header">
                         <h3><i class="fas fa-heartbeat"></i> Fréquence Cardiaque - Dernières 24h</h3>
@@ -98,4 +98,69 @@
 
     <script src="script.js"></script>
 </body>
+<script>
+async function loadDashboard() {
+    try {
+        const res = await fetch('http://localhost/smart-bracelet-site/api/dashboard.php');
+        const data = await res.json();
+
+        // 🔹 Présence
+        const attendanceDiv = document.getElementById('attendance-list');
+        attendanceDiv.innerHTML = data.attendance.map(a => `
+            <p>
+                ${a.nom} ${a.prenom} 
+                → Entrée: ${a.check_in || '--'} 
+                | Sortie: ${a.check_out || '--'}
+            </p>
+        `).join('');
+
+       
+        const empDiv = document.getElementById('employees-list');
+        empDiv.innerHTML = data.employees.map(e => `
+            <p>${e.nom} ${e.prenom} - ${e.department}</p>
+        `).join('');
+
+        const alertDiv = document.getElementById('alerts-list');
+        alertDiv.innerHTML = data.alerts.map(a => `
+            <p style="color:red;">
+                ⚠ ${a.nom} : ${a.alert_message} (${a.niveau})
+            </p>
+        `).join('');
+
+        document.getElementById('alert-count').textContent = data.alerts.length;
+
+       
+        new Chart(document.getElementById('heartRateChart'), {
+            type: 'line',
+            data: {
+                labels: data.heartRate.map((_, i) => i),
+                datasets: [{
+                    label: 'BPM',
+                    data: data.heartRate
+                }]
+            }
+        });
+
+        new Chart(document.getElementById('temperatureChart'), {
+            type: 'line',
+            data: {
+                labels: data.temperature.map((_, i) => i),
+                datasets: [{
+                    label: '°C',
+                    data: data.temperature
+                }]
+            }
+        });
+
+        document.getElementById('last-update-time').textContent =
+            "Dernière mise à jour: " + new Date().toLocaleTimeString();
+
+    } catch (err) {
+        console.error("Erreur:", err);
+    }
+}
+
+
+loadDashboard();
+setInterval(loadDashboard, 5000);</script>
 </html>
