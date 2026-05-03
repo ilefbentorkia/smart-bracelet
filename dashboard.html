@@ -101,10 +101,8 @@
 <script>
 async function loadDashboard() {
     try {
-        const res = await fetch('http://localhost/smart-bracelet-site/api/dashboard.php');
+        const res = await fetch('http://localhost/smart-bracelet-site/dashboard.php');
         const data = await res.json();
-
-        // 🔹 Présence
         const attendanceDiv = document.getElementById('attendance-list');
         attendanceDiv.innerHTML = data.attendance.map(a => `
             <p>
